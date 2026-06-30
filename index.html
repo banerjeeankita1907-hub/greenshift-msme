@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenShift – Digital Sustainability Hub for MSMEs</title>
+    <style>
+        /* ========== CSS Custom Properties & Reset ========== */
+        :root {
+            --clr-bg: #ffffff;
+            --clr-text: #1e2b2e;
+            --clr-primary: #0d7c66;
+            --clr-primary-light: #e0f2ef;
+            --clr-accent: #f4a261;
+            --clr-card: #f8fbf9;
+            --clr-border: #dce5e2;
+            --shadow: 0 10px 30px rgba(0,0,0,0.06);
+            --radius: 16px;
+            --transition: 0.3s ease;
+        }
+        .dark {
+            --clr-bg: #131c1a;
+            --clr-text: #e0ece7;
+            --clr-primary: #2dd4b2;
+            --clr-primary-light: #1a332e;
+            --clr-accent: #f4a261;
+            --clr-card: #1d2b28;
+            --clr-border: #2e413b;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--clr-bg);
+            color: var(--clr-text);
+            line-height: 1.6;
+            transition: background var(--transition), color var(--transition);
+            overflow-x: hidden;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* ========== Typography ========== */
+        h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.2; }
+        h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 0.5em; }
+        h3 { font-size: 1.3rem; margin-bottom: 0.4em; }
+        .text-primary { color: var(--clr-primary); }
+        .text-accent { color: var(--clr-accent); }
+
+        /* ========== Buttons ========== */
+        .btn {
+            display: inline-block; padding: 0.85em 1.8em; border: none; border-radius: 40px;
+            font-weight: 600; cursor: pointer; transition: all var(--transition); text-decoration: none;
+            font-size: 1rem; letter-spacing: 0.3px;
+        }
+        .btn-primary { background: var(--clr-primary); color: #fff; box-shadow: 0 4px 14px rgba(13,124,102,0.3); }
+        .btn-primary:hover { background: #0a5f4e; transform: translateY(-2px); }
+        .btn-outline {
+            background: transparent; border: 2px solid var(--clr-primary); color: var(--clr-primary);
+        }
+        .btn-outline:hover { background: var(--clr-primary-light); }
+
+        /* ========== Header ========== */
+        header {
+            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(12px);
+            background: var(--clr-bg); border-bottom: 1px solid var(--clr-border);
+            transition: background var(--transition);
+        }
+        nav {
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 0;
+        }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--clr-primary); display: flex; align-items: center; gap: 10px; }
+        .nav-links { display: flex; gap: 1.8rem; align-items: center; list-style: none; flex-wrap: wrap; }
+        .nav-links a {
+            text-decoration: none; color: var(--clr-text); font-weight: 500; transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--clr-primary); }
+        .theme-toggle {
+            background: none; border: 2px solid var(--clr-border); border-radius: 50%;
+            width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: background var(--transition); color: var(--clr-text);
+        }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+        .hamburger span { width: 25px; height: 3px; background: var(--clr-text); border-radius: 2px; transition: 0.3s; }
+
+        /* ========== Hero ========== */
+        .hero {
+            padding: 5rem 0 4rem; text-align: center; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle at 30% 40%, var(--clr-primary-light) 0%, transparent 50%);
+            z-index: -1; animation: rotate 25s linear infinite;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .hero p.subtitle { font-size: 1.2rem; max-width: 650px; margin: 1.2rem auto 2rem; color: var(--clr-text); opacity: 0.8; }
+        .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+        /* ========== Stats Counter ========== */
+        .stats {
+            display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin: 3rem 0 2rem;
+            background: var(--clr-card); border-radius: var(--radius); padding: 2rem 1rem; box-shadow: var(--shadow);
+        }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 2.8rem; font-weight: 800; color: var(--clr-primary); }
+        .stat-label { font-size: 1rem; opacity: 0.8; }
+
+        /* ========== Section common ========== */
+        section { padding: 4rem 0; }
+        .section-title { text-align: center; margin-bottom: 3rem; }
+        .grid-2, .grid-3 { display: grid; gap: 2rem; }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .card {
+            background: var(--clr-card); border-radius: var(--radius); padding: 2rem;
+            box-shadow: var(--shadow); transition: transform var(--transition); border: 1px solid var(--clr-border);
+        }
+        .card:hover { transform: translateY(-6px); }
+
+        /* ========== Calculator ========== */
+        .calc-card { background: var(--clr-card); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); }
+        .slider-group { margin: 1.5rem 0; }
+        .slider-group label { display: flex; justify-content: space-between; font-weight: 600; }
+        input[type=range] { width: 100%; margin: 0.5rem 0; accent-color: var(--clr-primary); }
+        .calc-result { margin-top: 1.8rem; font-size: 1.4rem; font-weight: 700; }
+        .tip-box { background: var(--clr-primary-light); padding: 1rem; border-radius: 12px; margin-top: 1rem; }
+
+        /* ========== Quiz ========== */
+        .quiz-option {
+            display: block; width: 100%; text-align: left; padding: 0.9rem 1.2rem; margin: 0.5rem 0;
+            border: 2px solid var(--clr-border); border-radius: 40px; background: transparent;
+            cursor: pointer; font-size: 1rem; transition: all 0.2s; color: var(--clr-text);
+        }
+        .quiz-option:hover, .quiz-option.selected { border-color: var(--clr-primary); background: var(--clr-primary-light); }
+        .quiz-result { margin-top: 2rem; font-weight: 700; font-size: 1.2rem; }
+
+        /* ========== Marketplace ========== */
+        .filter-btns { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 2rem; justify-content: center; }
+        .filter-btn {
+            padding: 0.5rem 1.2rem; border-radius: 30px; border: 1px solid var(--clr-border);
+            background: var(--clr-card); cursor: pointer; transition: 0.2s; color: var(--clr-text);
+        }
+        .filter-btn.active, .filter-btn:hover { background: var(--clr-primary); color: white; border-color: var(--clr-primary); }
+        .product-card { display: flex; flex-direction: column; }
+        .product-card .tag {
+            background: var(--clr-primary-light); color: var(--clr-primary); font-size: 0.8rem;
+            padding: 0.2rem 0.8rem; border-radius: 20px; align-self: flex-start; margin-bottom: 0.8rem;
+        }
+
+        /* ========== Chatbot ========== */
+        .chat-widget {
+            position: fixed; bottom: 25px; right: 25px; z-index: 200;
+        }
+        .chat-toggle {
+            width: 60px; height: 60px; border-radius: 50%; background: var(--clr-primary);
+            color: white; border: none; font-size: 2rem; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center;
+        }
+        .chat-body {
+            position: absolute; bottom: 80px; right: 0; width: 320px; max-height: 450px;
+            background: var(--clr-card); border-radius: var(--radius); box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            display: none; flex-direction: column; overflow: hidden; border: 1px solid var(--clr-border);
+        }
+        .chat-body.open { display: flex; }
+        .chat-header { background: var(--clr-primary); color: white; padding: 0.8rem 1rem; font-weight: 600; }
+        .chat-messages { padding: 1rem; overflow-y: auto; max-height: 280px; display: flex; flex-direction: column; gap: 0.6rem; }
+        .msg { padding: 0.7rem 1rem; border-radius: 18px; max-width: 80%; line-height: 1.4; }
+        .msg.bot { background: var(--clr-primary-light); align-self: flex-start; }
+        .msg.user { background: var(--clr-primary); color: white; align-self: flex-end; }
+        .chat-input-area { display: flex; padding: 0.8rem; border-top: 1px solid var(--clr-border); }
+        .chat-input-area input {
+            flex: 1; padding: 0.7rem 1rem; border-radius: 30px; border: 1px solid var(--clr-border);
+            background: var(--clr-bg); color: var(--clr-text);
+        }
+        .chat-input-area button {
+            margin-left: 0.5rem; background: var(--clr-primary); border: none; border-radius: 50%;
+            width: 42px; height: 42px; color: white; font-size: 1.2rem; cursor: pointer;
+        }
+
+        /* ========== Footer ========== */
+        footer { text-align: center; padding: 2rem 0; border-top: 1px solid var(--clr-border); opacity: 0.8; }
+
+        /* ========== Animations ========== */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ========== Mobile ========== */
+        @media (max-width: 768px) {
+            .nav-links { display: none; flex-direction: column; width: 100%; background: var(--clr-card); position: absolute; top: 70px; left: 0; padding: 1rem; }
+            .nav-links.open { display: flex; }
+            .hamburger { display: flex; }
+            .stats { gap: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">🌿 GreenShift</div>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#calculator">Calculator</a></li>
+                    <li><a href="#maturity">Maturity</a></li>
+                    <li><a href="#marketplace">Marketplace</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><button id="themeToggle" class="theme-toggle" aria-label="Theme">🌓</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <h1>Grow <span class="text-primary">Sustainably</span>,<br>Digitally Transform Your <span class="text-accent">MSME</span></h1>
+                <p class="subtitle">Free tools to calculate your carbon footprint, assess digital readiness, and connect with green suppliers – built for Indian micro & small enterprises.</p>
+                <div class="hero-cta">
+                    <a href="#calculator" class="btn btn-primary">Start Carbon Audit</a>
+                    <a href="#maturity" class="btn btn-outline">Check Digital Score</a>
+                </div>
+                <div class="stats reveal">
+                    <div class="stat-item"><div class="stat-number" data-target="12500">0</div><div class="stat-label">MSMEs Assisted</div></div>
+                    <div class="stat-item"><div class="stat-number" data-target="8700">0</div><div class="stat-label">Tonnes CO₂ Saved</div></div>
+                    <div class="stat-item"><div class="stat-number" data-target="92">0</div><div class="stat-label">% Satisfaction</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sustainability Calculator -->
+        <section id="calculator">
+            <div class="container">
+                <h2 class="section-title">📊 Carbon Footprint Estimator</h2>
+                <div class="calc-card reveal">
+                    <p style="margin-bottom:1rem;">Adjust sliders based on your monthly business operations.</p>
+                    <div class="slider-group">
+                        <label>⚡ Electricity <span id="elecVal">500 kWh</span></label>
+                        <input type="range" id="electricity" min="0" max="5000" value="500" step="10">
+                    </div>
+                    <div class="slider-group">
+                        <label>🗑️ Waste generated <span id="wasteVal">200 kg</span></label>
+                        <input type="range" id="waste" min="0" max="2000" value="200" step="10">
+                    </div>
+                    <div class="slider-group">
+                        <label>🚛 Fuel (transport) <span id="fuelVal">300 litres</span></label>
+                        <input type="range" id="fuel" min="0" max="3000" value="300" step="10">
+                    </div>
+                    <div class="calc-result" id="co2Result">🌍 Estimated monthly CO₂: 1,130 kg</div>
+                    <div class="tip-box" id="co2Tip">💡 Switch to LED lighting and reduce waste segregation costs.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Digital Maturity Quiz -->
+        <section id="maturity">
+            <div class="container">
+                <h2 class="section-title">📈 Digital Maturity Self‑Assessment</h2>
+                <div class="card reveal" id="quizContainer">
+                    <div id="quizQuestion"></div>
+                    <div id="quizOptions"></div>
+                    <div id="quizResult" class="quiz-result"></div>
+                    <button id="quizRestart" class="btn btn-outline" style="display:none; margin-top:1rem;">Retake Quiz</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sustainable Marketplace -->
+        <section id="marketplace">
+            <div class="container">
+                <h2 class="section-title">🛍️ Sustainable Supplier Marketplace</h2>
+                <div class="filter-btns reveal">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="solar">Solar</button>
+                    <button class="filter-btn" data-filter="packaging">Eco Packaging</button>
+                    <button class="filter-btn" data-filter="textile">Organic Textile</button>
+                    <button class="filter-btn" data-filter="agri">Agri‑waste</button>
+                </div>
+                <div class="grid-3" id="marketGrid"></div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section style="background: var(--clr-primary-light);">
+            <div class="container">
+                <h2 class="section-title">❤️ Trusted by MSME Owners</h2>
+                <div class="grid-2 reveal">
+                    <div class="card">“GreenShift helped us cut electricity costs by 20% after we followed the carbon tips. Digital score made us invest in inventory app.”<br><strong>– Priya, Handicraft Exporter, Jaipur</strong></div>
+                    <div class="card">“We listed our biodegradable packaging here and got 3 new B2B clients within a month. The platform is exactly what small businesses need.”<br><strong>– Ramesh, EcoPack, Coimbatore</strong></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Chatbot -->
+    <div class="chat-widget" id="chatWidget">
+        <button class="chat-toggle" id="chatToggle">💬</button>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-header">GreenShift Assistant</div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="msg bot">Hi! Ask me about carbon footprint, digital tools, or green certifications for your MSME.</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Type a question...">
+                <button id="chatSend">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 GreenShift – Empowering MSMEs for a sustainable digital future. Built with 🌱</p>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            // ----- DOM Elements -----
+            const themeToggle = document.getElementById('themeToggle');
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('navLinks');
+            const chatToggle = document.getElementById('chatToggle');
+            const chatBody = document.getElementById('chatBody');
+            const chatInput = document.getElementById('chatInput');
+            const chatSend = document.getElementById('chatSend');
+            const chatMessages = document.getElementById('chatMessages');
+
+            // ----- Dark/Light Mode -----
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && prefersDark)) {
+                document.body.classList.add('dark');
+            }
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+            });
+
+            // ----- Mobile Menu -----
+            hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => navLinks.classList.remove('open'));
+            });
+
+            // ----- Stats Counter Animation -----
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const animateCounter = (el) => {
+                const target = +el.getAttribute('data-target');
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                const update = () => {
+                    current += step;
+                    if (current < target) {
+                        el.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(update);
+                    } else {
+                        el.textContent = target.toLocaleString();
+                    }
+                };
+                update();
+            };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            statNumbers.forEach(num => observer.observe(num));
+
+            // ----- Reveal on Scroll -----
+            const reveals = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.15 });
+            reveals.forEach(el => revealObserver.observe(el));
+
+            // ----- Carbon Calculator -----
+            const electricitySlider = document.getElementById('electricity');
+            const wasteSlider = document.getElementById('waste');
+            const fuelSlider = document.getElementById('fuel');
+            const elecVal = document.getElementById('elecVal');
+            const wasteVal = document.getElementById('wasteVal');
+            const fuelVal = document.getElementById('fuelVal');
+            const co2Result = document.getElementById('co2Result');
+            const co2Tip = document.getElementById('co2Tip');
+
+            const emissionFactors = { electricity: 0.82, waste: 0.15, fuel: 2.68 }; // kg CO2 per unit
+            function updateCalculator() {
+                const elec = +electricitySlider.value;
+                const waste = +wasteSlider.value;
+                const fuel = +fuelSlider.value;
+                elecVal.textContent = elec + ' kWh';
+                wasteVal.textContent = waste + ' kg';
+                fuelVal.textContent = fuel + ' litres';
+                const total = (elec * emissionFactors.electricity) + (waste * emissionFactors.waste) + (fuel * emissionFactors.fuel);
+                co2Result.innerHTML = `🌍 Estimated monthly CO₂: <strong>${Math.round(total).toLocaleString()} kg</strong>`;
+                let tip = '';
+                if (elec > 1000) tip = '💡 Switch to energy‑efficient appliances and solar power.';
+                else if (waste > 500) tip = '♻️ Improve waste segregation and composting.';
+                else if (fuel > 500) tip = '🚲 Optimise delivery routes or shift to EV fleet.';
+                else tip = '✅ Great job! Keep monitoring and aim for carbon neutrality.';
+                co2Tip.textContent = tip;
+            }
+            [electricitySlider, wasteSlider, fuelSlider].forEach(s => s.addEventListener('input', updateCalculator));
+            updateCalculator();
+
+            // ----- Digital Maturity Quiz -----
+            const quizData = [
+                { question: "1. Does your business use digital accounting/invoicing?", options: ["No, completely manual", "Partially (Excel)", "Yes, cloud software"], scores: [0, 5, 10] },
+                { question: "2. How do you manage inventory?", options: ["Pen & paper", "Basic spreadsheet", "Digital inventory system"], scores: [0, 5, 10] },
+                { question: "3. Do you have an online presence (website/social)?", options: ["None", "Only social media", "Website + social media"], scores: [0, 5, 10] },
+                { question: "4. How do you communicate with customers?", options: ["Phone calls only", "WhatsApp Business", "Email marketing/CRM"], scores: [0, 5, 10] },
+                { question: "5. Do you use data to make decisions?", options: ["Never", "Sometimes", "Yes, analytics tools"], scores: [0, 5, 10] }
+            ];
+            let currentQ = 0, totalScore = 0;
+            const quizQuestion = document.getElementById('quizQuestion');
+            const quizOptions = document.getElementById('quizOptions');
+            const quizResult = document.getElementById('quizResult');
+            const quizRestart = document.getElementById('quizRestart');
+
+            function loadQuestion() {
+                if (currentQ >= quizData.length) {
+                    showQuizResult();
+                    return;
+                }
+                const q = quizData[currentQ];
+                quizQuestion.innerHTML = `<h3>${q.question}</h3>`;
+                quizOptions.innerHTML = q.options.map((opt, i) => 
+                    `<button class="quiz-option" data-score="${q.scores[i]}">${opt}</button>`
+                ).join('');
+                document.querySelectorAll('.quiz-option').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        totalScore += +this.dataset.score;
+                        currentQ++;
+                        loadQuestion();
+                    });
+                });
+                quizResult.textContent = '';
+                quizRestart.style.display = 'none';
+            }
+            function showQuizResult() {
+                quizQuestion.innerHTML = '';
+                quizOptions.innerHTML = '';
+                let level, advice;
+                if (totalScore <= 15) {
+                    level = 'Beginner 🟢'; advice = 'Start with free digital tools: cloud accounting, WhatsApp Business, and create a simple website.';
+                } else if (totalScore <= 35) {
+                    level = 'Intermediate 🟡'; advice = 'You’re on track! Consider CRM software, digital payments, and social media ads.';
+                } else {
+                    level = 'Advanced 🔵'; advice = 'Excellent! Explore AI analytics, automated marketing, and IoT for efficiency.';
+                }
+                quizResult.innerHTML = `📊 Your Digital Maturity Score: <strong>${totalScore}/50</strong> – ${level}<br><small>${advice}</small>`;
+                quizRestart.style.display = 'inline-block';
+            }
+            quizRestart.addEventListener('click', () => { currentQ = 0; totalScore = 0; loadQuestion(); });
+            loadQuestion();
+
+            // ----- Marketplace Data & Filter -----
+            const products = [
+                { name: "SunPower Solar Kit", cat: "solar", desc: "Affordable rooftop solar for small workshops.", tag: "Solar" },
+                { name: "EcoWrap Biodegradable", cat: "packaging", desc: "Compostable packaging from corn starch.", tag: "Eco Packaging" },
+                { name: "Organic Khadi Fabric", cat: "textile", desc: "Handspun, natural-dyed cotton fabric.", tag: "Organic Textile" },
+                { name: "CocoPeat Blocks", cat: "agri", desc: "Sustainable soil conditioner from coconut husk.", tag: "Agri‑waste" },
+                { name: "Solar Water Heater", cat: "solar", desc: "Low-cost industrial solar water heating.", tag: "Solar" },
+                { name: "Bagasse Tableware", cat: "packaging", desc: "Plates & bowls from sugarcane waste.", tag: "Eco Packaging" },
+                { name: "Hemp Backpack", cat: "textile", desc: "Durable, eco-friendly hemp bags.", tag: "Organic Textile" },
+                { name: "Bio‑enzyme Cleaner", cat: "agri", desc: "Citrus peel enzyme cleaning solution.", tag: "Agri‑waste" }
+            ];
+            const marketGrid = document.getElementById('marketGrid');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            function renderMarket(filter = 'all') {
+                const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+                marketGrid.innerHTML = filtered.map(p => 
+                    `<div class="card product-card">
+                        <span class="tag">${p.tag}</span>
+                        <h3>${p.name}</h3>
+                        <p>${p.desc}</p>
+                        <small style="margin-top:auto;">📞 Contact supplier</small>
+                    </div>`
+                ).join('');
+            }
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderMarket(btn.dataset.filter);
+                });
+            });
+            renderMarket();
+
+            // ----- Chatbot Logic -----
+            const faq = {
+                "carbon": "Use our Carbon Calculator above. Enter your monthly electricity, waste, and fuel data to see your footprint.",
+                "digital": "Take the Digital Maturity Quiz to get a personalised score and tips on adopting digital tools.",
+                "certification": "Green certifications like ISO 14001 or India's GreenPro can boost your market credibility. We recommend starting with a basic energy audit.",
+                "loan": "Many Indian banks offer green loans for MSMEs under schemes like SIDBI's Green Finance. Check with your local branch.",
+                "default": "I can help with carbon footprint, digital tools, certifications, and green finance. Just ask!"
+            };
+            function getBotResponse(input) {
+                const lower = input.toLowerCase();
+                if (lower.includes('carbon') || lower.includes('footprint')) return faq.carbon;
+                if (lower.includes('digital') || lower.includes('matur')) return faq.digital;
+                if (lower.includes('certif') || lower.includes('green label')) return faq.certification;
+                if (lower.includes('loan') || lower.includes('finance') || lower.includes('fund')) return faq.loan;
+                return faq.default;
+            }
+            function addMessage(text, isUser = false) {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `msg ${isUser ? 'user' : 'bot'}`;
+                msgDiv.textContent = text;
+                chatMessages.appendChild(msgDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            chatToggle.addEventListener('click', () => chatBody.classList.toggle('open'));
+            function sendMessage() {
+                const text = chatInput.value.trim();
+                if (!text) return;
+                addMessage(text, true);
+                chatInput.value = '';
+                setTimeout(() => addMessage(getBotResponse(text)), 500);
+            }
+            chatSend.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+        })();
+    </script>
+</body>
+</html>
